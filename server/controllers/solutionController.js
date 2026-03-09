@@ -4,12 +4,19 @@ const Notification = require('../models/Notification');
 const User = require('../models/User');
 const sendAnswerNotification = require('../utils/emailService');
 
+const evaluateAnswerAccuracy = require('../utils/aiAccuracyEvaluator');
+
 // @desc    Add a solution
 // @route   POST /api/solutions
 // @access  Private
 const addSolution = async (req, res) => {
   try {
     const { errorId, solutionText } = req.body;
+
+    const errorPost = await ErrorPost.findById(errorId);
+    if (!errorPost) {
+        return res.status(404).json({ message: 'Question not found' });
+    }
 
     const solution = new Solution({
       errorId,
@@ -19,9 +26,24 @@ const addSolution = async (req, res) => {
 
     const createdSolution = await solution.save();
 
+    // After saving normally, attempt AI evaluation securely without breaking the request
+    try {
+      const aiResult = await evaluateAnswerAccuracy(
+        errorPost.description,
+        solutionText
+      );
+
+      if (aiResult) {
+        createdSolution.accuracyScore = aiResult.accuracy;
+        createdSolution.accuracyReason = aiResult.reason;
+        await createdSolution.save();
+      }
+    } catch (aiError) {
+      console.error("Non-fatal AI evaluation error:", aiError);
+    }
+
     // Create notification for error author
-    const errorPost = await ErrorPost.findById(errorId);
-    if (errorPost && errorPost.userId.toString() !== req.user._id.toString()) {
+    if (errorPost.userId.toString() !== req.user._id.toString()) {
         await Notification.create({
             userId: errorPost.userId,
             message: `${req.user.name} posted a solution to your error: ${errorPost.title}`,

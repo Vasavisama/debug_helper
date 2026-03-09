@@ -15,6 +15,7 @@ const QuestionDetail = () => {
     const [solutions, setSolutions] = useState([]);
     const [newSolution, setNewSolution] = useState('');
     const [loading, setLoading] = useState(true);
+    const [isPostingSolution, setIsPostingSolution] = useState(false);
 
     // Reply state tracking which solution's reply box is open
     const [replyingTo, setReplyingTo] = useState(null);
@@ -62,11 +63,14 @@ const QuestionDetail = () => {
         e.preventDefault();
         if (!newSolution.trim()) return;
         try {
+            setIsPostingSolution(true);
             await api.post('/solutions', { errorId: id, solutionText: newSolution });
             setNewSolution('');
             fetchQuestionAndAnswers();
         } catch (error) {
             console.error('Failed to post solution', error);
+        } finally {
+            setIsPostingSolution(false);
         }
     };
 
@@ -293,6 +297,13 @@ const QuestionDetail = () => {
                                 {solution.solutionText}
                             </div>
 
+                            {/* AI Accuracy */}
+                            {solution.accuracyScore && (
+                                <div className="ai-accuracy">
+                                    AI Accuracy: {solution.accuracyScore}%
+                                </div>
+                            )}
+
                             {/* Answer Footer (Vote / Reply) */}
                             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
                                 <button
@@ -365,7 +376,9 @@ const QuestionDetail = () => {
                             value={newSolution} onChange={(e) => setNewSolution(e.target.value)}
                             placeholder="Write your solution..." required
                         />
-                        <button type="submit" className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }}>Post Answer</button>
+                        <button type="submit" className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }} disabled={isPostingSolution}>
+                            {isPostingSolution ? 'Evaluating Answer...' : 'Post Answer'}
+                        </button>
                     </form>
                 ) : (
                     <div className="glass-panel text-center" style={{ padding: '2rem' }}>

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 import { formatTimeAgo } from '../utils/formatTimeAgo';
@@ -59,11 +59,11 @@ const Navbar = () => {
                     DebugHelper
                 </Link>
                 <div className="navbar-links">
-                    <Link to="/" className="nav-link">Home</Link>
+                    <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-link active-nav' : 'nav-link'}>Home</NavLink>
                     {user ? (
                         <>
-                            <Link to="/post-error" className="nav-link btn-primary-sm">Post Error</Link>
-                            <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                            <NavLink to="/post-error" className={({ isActive }) => isActive ? 'nav-link active-nav' : 'nav-link'}>Post Error</NavLink>
+                            <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'nav-link active-nav' : 'nav-link'}>Dashboard</NavLink>
 
                             <div className="nav-user">
                                 <div className="notification-wrapper">

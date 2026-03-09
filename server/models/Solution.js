@@ -5,7 +5,9 @@ const solutionSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   solutionText: { type: String, required: true },
   votes: { type: Number, default: 0 },
-  accepted: { type: Boolean, default: false }
+  accepted: { type: Boolean, default: false },
+  accuracyScore: { type: Number, default: null },
+  accuracyReason: { type: String, default: "" }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Solution', solutionSchema);

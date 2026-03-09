@@ -32,7 +32,7 @@ const Dashboard = () => {
         setLoading(true);
         try {
             const [errorsRes, solutionsRes] = await Promise.all([
-                api.get(`/errors/user/${user._id}`),
+                api.get(`/errors/my`),
                 api.get(`/solutions/user/${user._id}`),
             ]);
             setUserErrors(errorsRes.data);
@@ -103,7 +103,7 @@ const Dashboard = () => {
 
     return (
         <div className="container mt-8 animate-fade-in">
-            <div className="dashboard-header glass-panel mb-8" style={{ padding: '2rem', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            <div className="dashboard-header glass-panel" style={{ padding: '2rem', display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '1.25rem' }}>
                 <div style={{
                     width: '80px', height: '80px', borderRadius: '50%',
                     backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)',

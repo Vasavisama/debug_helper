@@ -139,6 +139,18 @@ const getUserErrors = async (req, res) => {
     }
 }
 
+// @desc    Get logged in user's errors (Dashboard)
+// @route   GET /api/errors/my
+// @access  Private
+const getMyQuestions = async (req, res) => {
+    try {
+        const questions = await ErrorPost.find({ userId: req.user.id }).sort({ createdAt: -1 });
+        res.json(questions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 // @desc    Increment error view count
 // @route   PUT /api/errors/:id/view
 // @access  Public
@@ -166,5 +178,6 @@ module.exports = {
   updateErrorPost,
   deleteErrorPost,
   getUserErrors,
+  getMyQuestions,
   incrementErrorView
 };

@@ -1,7 +1,9 @@
 .ai-assistant {
     position: sticky;
     top: 5rem;
-    height: fit-content;
+    max-height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: column;
 }
 
 .ai-assistant-header {
@@ -147,6 +149,10 @@
     margin-top: 1rem;
     border-top: 1px solid var(--border-color);
     padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
 }
 
 .ai-response-header {
@@ -187,8 +193,8 @@
 }
 
 .ai-response-content {
-    max-height: 400px;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding-right: 0.5rem;
     font-size: 0.85rem;
     line-height: 1.7;

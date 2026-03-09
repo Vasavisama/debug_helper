@@ -7,6 +7,7 @@ const {
   updateErrorPost,
   deleteErrorPost,
   getUserErrors,
+  getMyQuestions,
   incrementErrorView
 } = require('../controllers/errorController');
 const { protect } = require('../middleware/auth');
@@ -14,6 +15,10 @@ const { protect } = require('../middleware/auth');
 router.route('/')
   .post(protect, createErrorPost)
   .get(getErrorPosts);
+
+// Protected route for the dashboard to get own questions
+router.route('/my')
+    .get(protect, getMyQuestions);
 
 // These must come BEFORE /:id to avoid Express matching "user" or "my" as an :id
 router.route('/user/:userId')

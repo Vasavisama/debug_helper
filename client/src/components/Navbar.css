@@ -55,6 +55,13 @@
     text-decoration: none;
 }
 
+.active-nav {
+    background-color: #2563eb;
+    color: white !important;
+    border-radius: 8px;
+    padding: 6px 14px;
+}
+
 .btn-primary-sm {
     background-color: var(--accent-light);
     color: var(--accent-primary);

@@ -15,13 +15,14 @@ const PostError = () => {
 
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+    const [duplicateWarning, setDuplicateWarning] = useState(null);
 
     useEffect(() => {
         if (!authLoading && !user) navigate('/login');
     }, [user, authLoading, navigate]);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!title || !description || !technology) {
             setErrorMsg('Title, description, and technology are required.');
             return;
@@ -32,6 +33,21 @@ const PostError = () => {
         try {
             setLoading(true);
             setErrorMsg('');
+
+            // If we haven't warned the user yet, check for duplicates
+            if (!duplicateWarning) {
+                try {
+                    const aiRes = await api.post('/ai/check-duplicate', { title, description });
+                    if (aiRes.data.isDuplicate && aiRes.data.similarQuestions.length > 0) {
+                        setDuplicateWarning(aiRes.data.similarQuestions);
+                        return; // Halt submission here
+                    }
+                } catch (aiCheckError) {
+                    console.error("Duplicate check failed, proceeding anyway", aiCheckError);
+                }
+            }
+
+            // Execute the actual submission
             const res = await api.post('/errors', {
                 title,
                 description,
@@ -103,12 +119,36 @@ const PostError = () => {
                         />
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                        <button type="button" onClick={() => navigate(-1)} className="btn btn-secondary">Cancel</button>
-                        <button type="submit" className="btn btn-primary" disabled={loading}>
-                            {loading ? <span className="spinner"></span> : 'Post Question'}
-                        </button>
-                    </div>
+                    {duplicateWarning ? (
+                        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', borderLeft: '4px solid #fbbf24', backgroundColor: 'rgba(251, 191, 36, 0.05)' }}>
+                            <h3 style={{ color: '#fbbf24', margin: '0 0 0.5rem 0', fontWeight: 600 }}>Similar Questions Found</h3>
+                            <p style={{ margin: '0 0 1rem 0', fontSize: '0.95rem', color: 'var(--text-muted)' }}>
+                                This question appears highly similar to ones already asked. Would you like to check them out first?
+                            </p>
+                            <ul style={{ margin: '0 0 1.5rem 0', paddingLeft: '1.5rem', fontSize: '0.95rem' }}>
+                                {duplicateWarning.map(q => (
+                                    <li key={q._id} style={{ marginBottom: '0.5rem' }}>
+                                        <a href={`/question/${q._id}`} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
+                                            {q.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                                <button type="button" onClick={() => setDuplicateWarning(null)} className="btn btn-secondary">Edit Question</button>
+                                <button type="button" onClick={() => handleSubmit()} className="btn btn-primary" style={{ backgroundColor: '#fbbf24', color: '#000', border: 'none' }}>
+                                    {loading ? <span className="spinner" style={{ borderColor: 'rgba(0,0,0,0.2)', borderTopColor: '#000' }}></span> : 'Post Anyway'}
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                            <button type="button" onClick={() => navigate(-1)} className="btn btn-secondary">Cancel</button>
+                            <button type="submit" className="btn btn-primary" disabled={loading}>
+                                {loading ? <span className="spinner"></span> : 'Post Question'}
+                            </button>
+                        </div>
+                    )}
                 </form>
             </div>
         </div>

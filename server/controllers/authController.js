@@ -117,8 +117,26 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+// @desc    Get leaderboard top 100
+// @route   GET /api/auth/leaderboard
+// @access  Public
+const getLeaderboard = async (req, res) => {
+  try {
+    const topUsers = await User.find({})
+      .sort({ points: -1 }) // Sort by points descending
+      .limit(100)
+      .select('name profileImage points reputation'); // Select only needed fields
+
+    res.json(topUsers);
+  } catch (error) {
+    console.error("LEADERBOARD ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
+  getLeaderboard,
 };

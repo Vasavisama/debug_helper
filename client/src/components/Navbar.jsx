@@ -60,6 +60,7 @@ const Navbar = () => {
                 </Link>
                 <div className="navbar-links">
                     <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-link active-nav' : 'nav-link'}>Home</NavLink>
+                    <NavLink to="/leaderboard" className={({ isActive }) => isActive ? 'nav-link active-nav' : 'nav-link'}>Leaderboard</NavLink>
                     {user ? (
                         <>
                             <NavLink to="/post-error" className={({ isActive }) => isActive ? 'nav-link active-nav' : 'nav-link'}>Post Error</NavLink>

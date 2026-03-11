@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import PostError from './pages/PostError';
 import QuestionDetail from './pages/QuestionDetail';
+import Leaderboard from './pages/Leaderboard';
 
 // Placeholder Pages
 const Profile = () => <div className="container mt-8 animate-fade-in"><h2>Profile</h2></div>;
@@ -27,6 +28,7 @@ function App() {
             <Route path="/error/:id" element={<QuestionDetail />} />
             <Route path="/question/:id" element={<QuestionDetail />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         </main>
       </div>

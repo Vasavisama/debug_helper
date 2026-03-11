@@ -34,8 +34,7 @@ const addSolution = async (req, res) => {
       );
 
       if (aiResult) {
-        createdSolution.accuracyScore = aiResult.accuracy;
-        createdSolution.accuracyReason = aiResult.reason;
+        createdSolution.aiAccuracy = aiResult.accuracy;
         await createdSolution.save();
       }
     } catch (aiError) {

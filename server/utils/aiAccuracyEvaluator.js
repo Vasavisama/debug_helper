@@ -17,16 +17,15 @@ You are an expert software engineer.
 Question:
 ${questionText}
 
-Answer:
+Developer Answer:
 ${answerText}
 
-Evaluate how accurate and helpful the answer is for solving the question.
+Evaluate how correct and helpful the answer is for solving the question.
 
 Return ONLY JSON:
 
 {
-  "accuracy": number between 0 and 100,
-  "reason": "short explanation"
+  "accuracy": number between 0 and 100
 }
 `;
 
@@ -46,10 +45,9 @@ Return ONLY JSON:
         }
     }
 
-    const parsed = JSON.parse(text.trim());
+    const parsed = JSON.parse(text);
     return {
-      accuracy: typeof parsed.accuracy === 'number' ? parsed.accuracy : parseInt(parsed.accuracy),
-      reason: parsed.reason || "Evaluated by AI."
+      accuracy: typeof parsed.accuracy === 'number' ? parsed.accuracy : parseInt(parsed.accuracy, 10)
     };
   } catch (error) {
     console.error("AI Evaluation Error (aiAccuracyEvaluator):", error);

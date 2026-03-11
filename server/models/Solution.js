@@ -6,8 +6,7 @@ const solutionSchema = new mongoose.Schema({
   solutionText: { type: String, required: true },
   votes: { type: Number, default: 0 },
   accepted: { type: Boolean, default: false },
-  accuracyScore: { type: Number, default: null },
-  accuracyReason: { type: String, default: "" }
+  aiAccuracy: { type: Number, default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Solution', solutionSchema);

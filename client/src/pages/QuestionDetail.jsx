@@ -298,9 +298,9 @@ const QuestionDetail = () => {
                             </div>
 
                             {/* AI Accuracy */}
-                            {solution.accuracyScore && (
+                            {solution.aiAccuracy != null && (
                                 <div className="ai-accuracy">
-                                    AI Accuracy: {solution.accuracyScore}%
+                                    AI Accuracy: {solution.aiAccuracy}%
                                 </div>
                             )}
 

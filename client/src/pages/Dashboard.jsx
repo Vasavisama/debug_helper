@@ -114,9 +114,12 @@ const Dashboard = () => {
                 <div>
                     <h2 style={{ fontSize: '1.75rem', fontWeight: 700, margin: 0 }}>{user.name}</h2>
                     <p className="text-muted" style={{ margin: '0.25rem 0 1rem 0' }}>{user.email}</p>
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         <span className="badge badge-accent" style={{ fontSize: '0.9rem', padding: '0.35rem 1rem' }}>
-                            🌟 {user.reputation} Reputation
+                            🌟 Reputation: {user.reputation}
+                        </span>
+                        <span className="badge badge-accent" style={{ fontSize: '0.9rem', padding: '0.35rem 1rem' }}>
+                            ✨ Points: {user.points || 0}
                         </span>
                     </div>
                 </div>

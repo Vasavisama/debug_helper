@@ -35,7 +35,20 @@ const addSolution = async (req, res) => {
 
       if (aiResult) {
         createdSolution.aiAccuracy = aiResult.accuracy;
+
+        let points = 0;
+        if (aiResult.accuracy >= 90) points = 20;
+        else if (aiResult.accuracy >= 75) points = 15;
+        else if (aiResult.accuracy >= 50) points = 10;
+        else if (aiResult.accuracy >= 30) points = 5;
+        else points = 1;
+
+        createdSolution.aiPoints = points;
         await createdSolution.save();
+
+        if (points > 0) {
+            await User.findByIdAndUpdate(req.user._id, { $inc: { points: points } });
+        }
       }
     } catch (aiError) {
       console.error("Non-fatal AI evaluation error:", aiError);
@@ -73,7 +86,7 @@ const getSolutions = async (req, res) => {
   try {
     let solutions = await Solution.find({ errorId: req.params.errorId })
       .populate('userId', 'name profileImage reputation')
-      .sort({ votes: -1, createdAt: -1 })
+      .sort({ aiAccuracy: -1, votes: -1, createdAt: -1 })
       .lean();
 
     const Reply = require('../models/Reply');

@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profileImage: { type: String, default: '' },
   reputation: { type: Number, default: 0 },
+  points: { type: Number, default: 0 },
   bio: { type: String, default: '' }
 }, { timestamps: true });
 

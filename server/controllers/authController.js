@@ -80,6 +80,7 @@ const loginUser = async (req, res) => {
         email: user.email,
         profileImage: user.profileImage,
         reputation: user.reputation,
+        points: user.points,
       }
     });
 
@@ -105,6 +106,7 @@ const getUserProfile = async (req, res) => {
         email: user.email,
         profileImage: user.profileImage,
         reputation: user.reputation,
+        points: user.points,
         bio: user.bio,
       });
     } else {
